@@ -1,0 +1,10 @@
+User-agent: *
+
+Allow: /store/1
+Allow: /store/product/brasil-santos
+Allow: /store/product/colombia-excelso
+Allow: /
+
+Disallow: /store
+
+Sitemap: https://afternoon.com.ar/sitemap.xml
