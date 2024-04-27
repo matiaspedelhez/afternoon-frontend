@@ -1,7 +1,55 @@
 import type { NextPage } from "next";
 import Head from "next/head";
+import { FormEvent, useState } from "react";
+import { toast } from "react-hot-toast";
 
-const Home: NextPage = ({ products }: any) => {
+interface FormData {
+  firstName: string;
+  lastName: string;
+  email: string;
+  message: string;
+}
+
+async function sendEmail(formData: any) {
+  const response = await fetch("/api/send-email", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      formData,
+    }),
+  });
+
+  if (response.ok) {
+    const data = await response.json();
+    toast.success("Mensaje enviado correctamente");
+  } else {
+    console.error("Failed to send email");
+    toast.error("Ocurrió un error al enviar los datos");
+  }
+}
+
+const Home: NextPage = () => {
+  const [isSending, setIsSending] = useState(false);
+  async function onSubmit(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    setIsSending(true);
+
+    const formData = new FormData(event.currentTarget);
+    const response = await fetch("/api/send-email", {
+      method: "POST",
+      body: formData,
+    });
+
+    if (response.status === 200) {
+      setIsSending(false);
+      toast.success("Mensaje enviado correctamente");
+    } else {
+      toast.error("Ocurrió un error al enviar los datos");
+    }
+  }
+
   return (
     <>
       <Head>
@@ -27,7 +75,7 @@ const Home: NextPage = ({ products }: any) => {
             conocer más.
           </p>
         </div>
-        <form>
+        <form method="post" onSubmit={onSubmit}>
           <div className="space-y-12">
             <div className="">
               <div className="pb-12 mt-12 max-w-screen-md">
@@ -53,7 +101,7 @@ const Home: NextPage = ({ products }: any) => {
                         id="first-name"
                         required
                         autoComplete="given-name"
-                        className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                        className="block w-full rounded-md border-0 p-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-amber-700 sm:text-sm sm:leading-6"
                       />
                     </div>
                   </div>
@@ -71,7 +119,7 @@ const Home: NextPage = ({ products }: any) => {
                         name="last-name"
                         id="last-name"
                         autoComplete="family-name"
-                        className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                        className="block w-full rounded-md border-0 p-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-amber-700 sm:text-sm sm:leading-6"
                       />
                     </div>
                   </div>
@@ -90,24 +138,24 @@ const Home: NextPage = ({ products }: any) => {
                         type="email"
                         autoComplete="email"
                         required
-                        className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                        className="block w-full rounded-md border-0 p-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:bg-amber-700 sm:text-sm sm:leading-6"
                       />
                     </div>
                   </div>
                   <div className="col-span-full">
                     <label
-                      htmlFor="about"
+                      htmlFor="message"
                       className="block text-sm font-medium leading-6 text-gray-900"
                     >
                       Mensaje
                     </label>
                     <div className="mt-2">
                       <textarea
-                        id="about"
-                        name="about"
+                        id="message"
+                        name="message"
                         rows={3}
                         style={{ minHeight: "48px" }}
-                        className="block w-full h-24 rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-amber-700 sm:text-sm sm:leading-6 max-h-48"
+                        className="block w-full h-24 rounded-md border-0 p-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-amber-700 sm:text-sm sm:leading-6 max-h-48"
                         defaultValue={""}
                       />
                     </div>
@@ -118,11 +166,11 @@ const Home: NextPage = ({ products }: any) => {
             <div className="mt-6 flex items-center justify-start gap-x-6">
               <button
                 type="submit"
-                className="rounded-md bg-amber-700 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-amber-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-amber-700"
+                className="rounded-md bg-amber-700 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-amber-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-amber-700 disabled:bg-amber-900 disabled:text-opacity-20 disabled:cursor-not-allowed"
+                disabled={isSending}
               >
                 Enviar
               </button>
-              <p>Mensaje enviado correctamente.</p>
             </div>
           </div>
         </form>
