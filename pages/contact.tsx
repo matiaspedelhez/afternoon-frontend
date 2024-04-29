@@ -10,26 +10,6 @@ interface FormData {
   message: string;
 }
 
-async function sendEmail(formData: any) {
-  const response = await fetch("/api/send-email", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      formData,
-    }),
-  });
-
-  if (response.ok) {
-    const data = await response.json();
-    toast.success("Mensaje enviado correctamente");
-  } else {
-    console.error("Failed to send email");
-    toast.error("Ocurrió un error al enviar los datos");
-  }
-}
-
 const Home: NextPage = () => {
   const [isSending, setIsSending] = useState(false);
   async function onSubmit(event: FormEvent<HTMLFormElement>) {
@@ -37,15 +17,23 @@ const Home: NextPage = () => {
     setIsSending(true);
 
     const formData = new FormData(event.currentTarget);
+    let payload: any = {};
+    payload["from"] = "afternoon.com.ar";
+
+    for (var [key, value] of formData) {
+      payload[key] = value;
+    }
+
     const response = await fetch("/api/send-email", {
       method: "POST",
-      body: formData,
+      body: JSON.stringify([payload]),
     });
 
     if (response.status === 200) {
       setIsSending(false);
       toast.success("Mensaje enviado correctamente");
     } else {
+      setIsSending(false);
       toast.error("Ocurrió un error al enviar los datos");
     }
   }
@@ -53,7 +41,7 @@ const Home: NextPage = () => {
   return (
     <>
       <Head>
-        <title>{`Para cafeterías - Afternoon Roastery`}</title>
+        <title>{`Contacto - Afternoon Roastery`}</title>
         <meta property="og-locale" content="es_ES"></meta>
         <meta property="og:title" content={`Inicio`} key="title" />
         <meta
@@ -62,17 +50,16 @@ const Home: NextPage = () => {
         ></meta>
         <meta
           name="description"
-          content={`Sumá tu cafetería a Afternoon Roastery y te proveemos con el mejor café de especialidad, a un precio justo.`}
+          content={`¿Quieres personalizar tu compra? ¡Contactanos! Te proveemos con el mejor café de especialidad, a un precio justo.`}
         ></meta>
       </Head>
       <div className="mx-auto mt-24 max-w-7xl px-6 lg:px-8 ">
         <div className="mx-auto  lg:mx-0 border-b border-gray-900/10 pb-8">
           <h1 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
-            ¿Planeás abrir una cafetería?
+            Formulario de contacto
           </h1>
           <p className="mt-2 text-lg leading-8 text-gray-600">
-            También somos mayoristas de café de especialidad. Contactanos para
-            conocer más.
+            ¿Tienes alguna inquietud? ¡Contactanos!
           </p>
         </div>
         <form method="post" onSubmit={onSubmit}>
@@ -83,7 +70,7 @@ const Home: NextPage = () => {
                   Información de contacto
                 </h2>
                 <p className="mt-1 text-sm leading-6 text-gray-600">
-                  Use un correo permanente donde puedas recibir correos.
+                  Contestaremos tu mensaje lo antes posible.
                 </p>
 
                 <div className="mt-4 grid grid-cols-1 gap-x-6 gap-y-4 sm:grid-cols-6">
@@ -138,7 +125,7 @@ const Home: NextPage = () => {
                         type="email"
                         autoComplete="email"
                         required
-                        className="block w-full rounded-md border-0 p-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:bg-amber-700 sm:text-sm sm:leading-6"
+                        className="block w-full rounded-md border-0 p-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-amber-700 sm:text-sm sm:leading-6"
                       />
                     </div>
                   </div>

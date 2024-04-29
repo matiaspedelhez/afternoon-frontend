@@ -17,12 +17,11 @@ export default async function handler(
   res: NextApiResponse
 ) {
   if (req.method === "POST") {
-    console.log(req.body);
     const mailOptions = {
       from: "MS_MzkunI@trial-vywj2lpz29jg7oqz.mlsender.net",
       to: "matiaspedelhez@gmail.com",
       subject: "Mayorista - Nuevo mensaje desde página web",
-      text: `${req.body}`,
+      text: req.body,
     };
 
     try {
