@@ -60,6 +60,12 @@ const Navbar: React.FunctionComponent<NavbarProps> = ({
                 Ayuda
               </a>
             </Link> */}
+            <a
+              href="https://afternoon.com.ar"
+              className="cursor-pointer text-center font-medium text-gray-500 hover:text-gray-900"
+            >
+              Minorista
+            </a>
             <Link
               href="/contact"
               className="text-base font-medium text-gray-500 hover:text-gray-900"
@@ -123,6 +129,14 @@ const Navbar: React.FunctionComponent<NavbarProps> = ({
                     Tienda
                   </a>
                 </Link>
+
+                <a
+                  href="https://afternoon.com.ar"
+                  className="cursor-pointer text-center font-medium text-gray-500 hover:text-gray-900"
+                >
+                  Minorista
+                </a>
+
                 <Link href="/contact">
                   <a
                     href="#"
