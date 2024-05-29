@@ -1,12 +1,19 @@
-import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/solid";
-import classNames from "classnames";
 import { useRouter } from "next/router";
+import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/solid";
 
-const PaginationButtons = ({
+import classNames from "classnames";
+
+interface PaginationButtonsProps {
+  totalProducts: number;
+  selectedPage: any;
+  totalDisplayed: number;
+}
+
+const PaginationButtons: React.FC<PaginationButtonsProps> = ({
   totalProducts,
   selectedPage,
   totalDisplayed,
-}: any) => {
+}) => {
   const router = useRouter();
 
   const singleButton = (content: number) => {

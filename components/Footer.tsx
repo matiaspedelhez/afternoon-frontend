@@ -1,5 +1,3 @@
-import Image from "next/image";
-
 function Footer() {
   return (
     <div className="pt-16">

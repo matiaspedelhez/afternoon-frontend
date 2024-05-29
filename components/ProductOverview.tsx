@@ -1,13 +1,13 @@
 import { useState, useEffect } from "react";
-import { StarIcon } from "@heroicons/react/solid";
-import { RadioGroup } from "@headlessui/react";
 import Image from "next/image";
-import { useSharedCartState } from "../pages/_app";
 import Link from "next/link";
 
+import { StarIcon } from "@heroicons/react/solid";
+import { RadioGroup } from "@headlessui/react";
+import { useSharedCartState } from "../pages/_app";
 import { toast } from "react-hot-toast";
 
-const colorNamer = require("color-namer");
+import { Product } from "../interfaces/product.interface";
 
 interface cartItem {
   id: string;
@@ -15,14 +15,12 @@ interface cartItem {
   imageSrc: string;
   handle: string;
   price: any;
-  // colorId: string;
-  // colorName: string;
   size: string;
   quantity: number;
 }
 
 interface ProductOverviewProps {
-  productByHandle: any;
+  productByHandle: Product;
 }
 
 const ProductOverview: React.FunctionComponent<ProductOverviewProps> = ({
@@ -33,35 +31,39 @@ const ProductOverview: React.FunctionComponent<ProductOverviewProps> = ({
     average: 5,
     totalCount: productByHandle.reviewsNumber,
   };
+
+  const sizes = [
+    { name: "Grano", inStock: true },
+    { name: "Fina", inStock: true },
+    { name: "Media fina", inStock: true },
+    { name: "Media", inStock: true },
+    { name: "Media gruesa", inStock: true },
+    { name: "Gruesa", inStock: true },
+  ];
+
+  const highlights = JSON.parse(productByHandle.hightlights) || "";
+
   const transformedProduct = {
     name: productByHandle.title,
-    price: `$${productByHandle.priceRange.maxVariantPrice.amount}`,
+    price: `$${productByHandle.maxVariantPrice}`,
     handle: productByHandle.handle,
     breadcrumbs: [{ id: 1, name: "Tienda", href: "/store" }],
-    images: productByHandle.images,
-    // colors: productByHandle.options
-    //   .filter((e: { name: string; values: string }) => e.name === "Color")[0]
-    //   .values.map((value: string) => ({
-    //     name: value,
-    //     class: `bg-[${value}]`,
-    //     selectedClass: `ring-[${value}]`,
-    //     color: value,
-    //   })),
-    sizes: productByHandle.options
-      .filter((e: { name: string; values: string }) => e.name === "Size")[0]
-      .values.map((size: string) => ({ name: size, inStock: true })),
+    images: [
+      productByHandle.imageUrl1,
+      productByHandle.imageUrl2,
+      productByHandle.imageUrl3,
+      productByHandle.imageUrl4,
+    ],
+    sizes: sizes,
     description: productByHandle.description,
-    highlights: productByHandle.highlights,
+    highlights: highlights,
     details: productByHandle.details,
   };
 
-  // const [selectedColor, setSelectedColor] = useState(
-  //   transformedProduct.colors[0].name
-  // );
+  const { shoppingCart, setShoppingCart } = useSharedCartState();
   const [selectedSize, setSelectedSize] = useState(
     transformedProduct.sizes[0].name
   );
-  const { shoppingCart, setShoppingCart } = useSharedCartState();
 
   useEffect(() => {
     const storagedCart: string | null = localStorage.getItem("shopping-cart");
@@ -83,7 +85,7 @@ const ProductOverview: React.FunctionComponent<ProductOverviewProps> = ({
   }, [shoppingCart]);
 
   const handleSetCartItems = (
-    newItem: any,
+    newItem: cartItem,
     e: React.MouseEvent<HTMLButtonElement>
   ): void => {
     e.preventDefault();
@@ -106,11 +108,11 @@ const ProductOverview: React.FunctionComponent<ProductOverviewProps> = ({
     return classes.filter(Boolean).join(" ");
   };
 
-  const productImage = (image: any) => {
+  const productImage = (image: string) => {
     return (
       <Image
-        src={image.url}
-        alt={image.altText}
+        src={image}
+        alt={image}
         layout="fill"
         objectFit="cover"
         objectPosition="center"
@@ -241,48 +243,6 @@ const ProductOverview: React.FunctionComponent<ProductOverviewProps> = ({
             </div>
 
             <form className="mt-10">
-              {/* Colors */}
-              {/* <div>
-                <h3 className="text-sm text-gray-900 font-medium">Color</h3>
-
-                <RadioGroup
-                  value={selectedColor}
-                  className="mt-4"
-                  onChange={setSelectedColor}
-                >
-                  <RadioGroup.Label className="sr-only">
-                    Eligir una opción
-                  </RadioGroup.Label>
-                  <div className="flex items-center space-x-3">
-                    {transformedProduct.colors.map((color: any) => (
-                      <RadioGroup.Option
-                        key={color.name}
-                        value={color.name}
-                        style={{ backgroundColor: color.color }}
-                        className={({ active, checked }) => {
-                          return classNames(
-                            checked ? "ring" : "",
-                            active ? "ring ring-offset-1" : "",
-                            "-m-0.5 relative p-0.5 rounded-full flex items-center justify-center cursor-pointer focus:outline-none"
-                          );
-                        }}
-                      >
-                        <RadioGroup.Label as="span" className="sr-only">
-                          {color.name}
-                        </RadioGroup.Label>
-                        <span
-                          aria-hidden="true"
-                          className={classNames(
-                            color.class,
-                            "h-8 w-8 border border-black border-opacity-10 rounded-full"
-                          )}
-                        />
-                      </RadioGroup.Option>
-                    ))}
-                  </div>
-                </RadioGroup>
-              </div> */}
-
               {/* Sizes */}
               <div className="mt-10">
                 <div className="flex items-center justify-between">
@@ -306,7 +266,7 @@ const ProductOverview: React.FunctionComponent<ProductOverviewProps> = ({
                     Elegir un tamaño
                   </RadioGroup.Label>
                   <div className="grid grid-cols-4 gap-4 sm:grid-cols-8 lg:grid-cols-4">
-                    {transformedProduct.sizes.map((size: any) => (
+                    {transformedProduct.sizes.map((size) => (
                       <RadioGroup.Option
                         key={size.name}
                         value={size.name}
@@ -370,12 +330,9 @@ const ProductOverview: React.FunctionComponent<ProductOverviewProps> = ({
                 onClick={(event) =>
                   handleSetCartItems(
                     {
-                      // id: `${transformedProduct.handle}?${selectedColor}?${selectedSize}`,
                       id: `${transformedProduct.handle}?${selectedSize}`,
                       title: transformedProduct.name,
-                      imageSrc: transformedProduct.images[0].url,
-                      // colorId: selectedColor,
-                      // colorName: colorNamer(selectedColor).ntc[0].name,
+                      imageSrc: transformedProduct.images[0],
                       size: selectedSize,
                       handle: transformedProduct.handle,
                       price: transformedProduct.price,
@@ -410,7 +367,7 @@ const ProductOverview: React.FunctionComponent<ProductOverviewProps> = ({
 
               <div className="mt-4">
                 <ul role="list" className="pl-4 list-disc text-sm space-y-2">
-                  {transformedProduct.highlights.map((highlight: any) => (
+                  {transformedProduct.highlights.map((highlight: string) => (
                     <li key={highlight} className="text-gray-400">
                       <span className="text-gray-600">{highlight}</span>
                     </li>

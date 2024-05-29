@@ -1,10 +1,21 @@
 import type { NextPage } from "next";
-import { storefront } from "../../../utils/storefront";
-import ProductOverview from "../../../components/ProductOverview";
 import Head from "next/head";
-import { getAllHandles, getProductByHandle } from "../../../back/getData.js";
 
-const ProductByHandle: NextPage = ({ productByHandle }: any) => {
+import { Product } from "../../../interfaces/product.interface";
+
+import ProductOverview from "../../../components/ProductOverview";
+import {
+  getAllHandles,
+  getProductByHandle,
+} from "../../../back/productsService";
+
+interface ProductByHandleProps {
+  productByHandle: Product;
+}
+
+const ProductByHandle: NextPage<ProductByHandleProps> = ({
+  productByHandle,
+}) => {
   return (
     <div>
       <Head>
@@ -29,70 +40,26 @@ const ProductByHandle: NextPage = ({ productByHandle }: any) => {
   );
 };
 
-const gql = String.raw;
-
-const allPaths = gql`
-  {
-    products(first: 100) {
-      nodes {
-        handle
-      }
-    }
-  }
-`;
-
-const productByHandle = (handle: string) => gql`
-  {
-    productByHandle(handle: "${handle}") {
-      id
-      handle
-      description
-      images(first: 4) {
-        nodes {
-          transformedSrc(maxHeight: 50, maxWidth: 50)
-          url
-          altText
-          id
-          width
-          height
-        }
-        
-      }
-      priceRange {
-        maxVariantPrice {
-          amount
-        }
-      }
-      title
-      options(first: 10) {
-        name
-        values
-    }
-    }
-  }
-`;
-
 export async function getStaticPaths() {
   try {
-    const handles = getAllHandles();
+    const handles = await getAllHandles();
 
-    const paths = handles.map(({ handle }: any) => ({
+    const paths = handles.map((handle: string) => ({
       params: {
         handle: handle,
       },
     }));
 
-    console.log(paths);
-
-    return { paths: paths, fallback: false };
+    return { paths, fallback: false };
   } catch (error) {
     console.log(error);
+    return { paths: [], fallback: false };
   }
 }
 
 export async function getStaticProps({ params }: any) {
   try {
-    const productByHandle = getProductByHandle(params.handle);
+    const productByHandle = await getProductByHandle(params.handle);
 
     return {
       props: { productByHandle },

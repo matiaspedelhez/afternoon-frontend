@@ -1,8 +1,6 @@
-import type { NextPage } from "next";
 import Image from "next/image";
 import Link from "next/link";
 
-//tailwind
 import { Fragment } from "react";
 import { Popover, Transition } from "@headlessui/react";
 import { MenuIcon, XIcon } from "@heroicons/react/outline";

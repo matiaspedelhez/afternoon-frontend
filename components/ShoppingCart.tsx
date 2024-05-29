@@ -1,12 +1,12 @@
-/* This example requires Tailwind CSS v2.0+ */
-import { Fragment, useEffect, useState } from "react";
 import Image from "next/image";
-import { Dialog, Transition } from "@headlessui/react";
-import { XIcon } from "@heroicons/react/outline";
 import Link from "next/link";
+import { Fragment, useEffect, useState } from "react";
+import { Dialog, Transition } from "@headlessui/react";
+
+import { XIcon } from "@heroicons/react/outline";
 import { useSharedCartState } from "../pages/_app";
 
-interface cartItem {
+interface CartItem {
   id: string;
   title: string;
   imageSrc: string;
@@ -16,13 +16,18 @@ interface cartItem {
   quantity: number;
 }
 
+interface ShoppingCartProps {
+  showCart: boolean;
+  closeCart: () => void;
+}
+
 function priceFormatting(x: any) {
   return x
     .toLocaleString("de-DE", { style: "currency", currency: "USD" })
     .slice(0, -2);
 }
 
-export default function ShoppingCart({ showCart, closeCart }: any) {
+const ShoppingCart: React.FC<ShoppingCartProps> = ({ showCart, closeCart }) => {
   const { shoppingCart, setShoppingCart } = useSharedCartState();
   const [subTotal, setSubTotal] = useState<number>(0);
 
@@ -44,7 +49,7 @@ export default function ShoppingCart({ showCart, closeCart }: any) {
     handleSetSubTotal();
   }, [shoppingCart]);
 
-  const handleRemoveItemFromCart = (product: cartItem): void => {
+  const handleRemoveItemFromCart = (product: CartItem): void => {
     const cartObject = shoppingCart.filter((item) => item.id === product.id)[0];
     const existingProductIndex = shoppingCart.findIndex(
       (item) => item.id === product.id
@@ -62,7 +67,7 @@ export default function ShoppingCart({ showCart, closeCart }: any) {
     }
   };
 
-  function buildWhatsappUrl(cart: any) {
+  function buildWhatsappUrl(cart: CartItem[]) {
     // build wpp body
     console.log(cart);
     let productLoopN = 0;
@@ -70,7 +75,7 @@ export default function ShoppingCart({ showCart, closeCart }: any) {
 
     if (cart.length) {
       payload = "Hola, deseo ordenar los siguientes productos: \n";
-      cart.forEach((product: any) => {
+      cart.forEach((product: CartItem) => {
         payload =
           payload +
           `Producto: ${product.title}\nCantidad: ${product.quantity}\nMolienda: ${product.size}\nPrecio total: ${product.price}`;
@@ -174,7 +179,7 @@ export default function ShoppingCart({ showCart, closeCart }: any) {
                                     alt="product image"
                                     layout="fill"
                                     quality={2}
-                                    objectFit="contain"
+                                    objectFit="cover"
                                     objectPosition="center"
                                   />
                                 </div>
@@ -261,4 +266,6 @@ export default function ShoppingCart({ showCart, closeCart }: any) {
       </Dialog>
     </Transition.Root>
   );
-}
+};
+
+export default ShoppingCart;

@@ -1,14 +1,15 @@
-import type { AppProps } from "next/app";
 import "../styles/globals.css";
+import type { AppProps } from "next/app";
 import { useRouter } from "next/router";
 import { useState, useEffect } from "react";
-import { useBetween } from "use-between";
 
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import LoadingScreen from "../components/LoadingScreen";
 import ShoppingCart from "../components/ShoppingCart";
+
 import { Toaster } from "react-hot-toast";
+import { useBetween } from "use-between";
 
 interface cartItem {
   id: string;

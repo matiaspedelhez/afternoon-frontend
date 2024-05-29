@@ -1,14 +1,10 @@
-import next, { NextPage } from "next";
-import { storefront } from "../../utils/storefront";
+import { NextPage } from "next";
+
 import PaginationButtons from "../../components/PaginationButtons";
 import packageInfo from "../../app_config.json";
 import ProductList from "../../components/ProductList";
 import Head from "next/head";
-import {
-  getAllHandles,
-  getTotalProducts,
-  getAllProducts,
-} from "../../back/getData";
+import { getTotalProducts, getAllProducts } from "../../back/productsService";
 
 const totalDisplayed = Number(packageInfo.catalog.total_items_to_display);
 
@@ -42,53 +38,9 @@ const Store: NextPage = ({ totalProducts, products, selectedPage }: any) => {
   );
 };
 
-const gql = String.raw;
-
-const getAllCursors = gql`
-  query getAllCursors {
-    products(first: 250) {
-      edges {
-        cursor
-      }
-    }
-  }
-`;
-
-const getProductsByCursor = (cursor: string): string => {
-  return gql`
-  query getProductsByCursor {
-    products(first: ${totalDisplayed}, ${
-    cursor === "" ? "" : 'after: "' + cursor + '"'
-  }){
-      edges {
-        node {
-          id
-          handle
-          title
-          priceRange {
-            minVariantPrice {
-              amount
-            }
-          }
-          images(first: 1) {
-            nodes {
-              altText
-              src
-              transformedSrc(maxWidth: 100, maxHeight: 100)
-            }
-          }
-        }
-      }
-    }
-  }
-`;
-};
-
 export async function getStaticPaths() {
   try {
-    // const { data } = await storefront(getAllCursors);
-
-    const pageNumber = Math.ceil(getTotalProducts() / totalDisplayed);
+    const pageNumber = Math.ceil((await getTotalProducts()) / totalDisplayed);
     const pages: string[] = new Array();
 
     for (let i = 1; i <= pageNumber; i++) {
@@ -110,105 +62,23 @@ export async function getStaticPaths() {
 }
 
 export async function getStaticProps({ params }: any) {
-  //not returning an object
-
   try {
-    // const allCursors = await storefront(getAllCursors);
-    const allCursors = {
-      data: {
-        products: {
-          edges: [
-            {
-              cursor: "example-handle",
-            },
-            {
-              cursor: "another-example",
-            },
-          ],
-        },
-      },
-    };
-    const allHandles = getAllHandles();
-    const totalProducts = getTotalProducts();
-    const selectedPage = await params.current;
+    const products = await getAllProducts();
+    const totalProducts = products.length;
 
-    const getProducts = getAllProducts();
-
-    // const getProducts =
-    //   selectedPage == 1
-    //     ? await storefront(getProductsByCursor(""))
-    //     : await storefront(
-    //         getProductsByCursor(
-    //           allCursors.data.products.edges[
-    //             (selectedPage - 1) * totalDisplayed - 1
-    //           ].cursor
-    //         )
-    //       );
-
-    // example response - debug only
-    // const getProducts = {
-    //   data: {
-    //     products: {
-    //       edges: [
-    //         {
-    //           node: {
-    //             id: "1",
-    //             handle: "example-handle",
-    //             title: "Example Product",
-    //             priceRange: {
-    //               minVariantPrice: {
-    //                 amount: "19.99",
-    //               },
-    //             },
-    //             images: {
-    //               nodes: [
-    //                 {
-    //                   altText: "Example Image",
-    //                   src:
-    //                     "https://img.freepik.com/free-photo/red-white-cat-i-white-studio_155003-13189.jpg?size=626&ext=jpg&ga=GA1.1.735520172.1711152000&semt=sph",
-    //                   transformedSrc:
-    //                     "https://img.freepik.com/free-photo/red-white-cat-i-white-studio_155003-13189.jpg?size=626&ext=jpg&ga=GA1.1.735520172.1711152000&semt=sph",
-    //                 },
-    //               ],
-    //             },
-    //           },
-    //         },
-    //         {
-    //           node: {
-    //             id: "2",
-    //             handle: "another-example",
-    //             title: "Another Example",
-    //             priceRange: {
-    //               minVariantPrice: {
-    //                 amount: "29.99",
-    //               },
-    //             },
-    //             images: {
-    //               nodes: [
-    //                 {
-    //                   altText: "Another Image",
-    //                   src:
-    //                     "https://img.freepik.com/free-photo/red-white-cat-i-white-studio_155003-13189.jpg?size=626&ext=jpg&ga=GA1.1.735520172.1711152000&semt=sph",
-    //                   transformedSrc:
-    //                     "https://img.freepik.com/free-photo/red-white-cat-i-white-studio_155003-13189.jpg?size=626&ext=jpg&ga=GA1.1.735520172.1711152000&semt=sph",
-    //                 },
-    //               ],
-    //             },
-    //           },
-    //         },
-    //       ],
-    //     },
-    //   },
-    // };
-
-    const products = getProducts.products;
+    const selectedPage = params.current;
 
     return {
       props: { totalProducts, selectedPage, products },
     };
   } catch (error) {
-    console.log(error);
+    console.error("Error fetching products:", error);
+    return {
+      props: {
+        products: [],
+        error: "Failed to fetch products",
+      },
+    };
   }
 }
-
 export default Store;
