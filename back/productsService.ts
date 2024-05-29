@@ -5,9 +5,7 @@ const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
 export const getAllHandles = async (): Promise<string[]> => {
   try {
-    const response = await axios.get(
-      `${API_URL}/product/handles?type=wholesale`
-    );
+    const response = await axios.get(`${API_URL}/product/handles?type=retail`);
     const handles: string[] = response.data;
     return handles;
   } catch (error) {
@@ -29,7 +27,7 @@ export const getProductByHandle = async (handle: string): Promise<Product> => {
 
 export const getAllProducts = async (): Promise<Product[]> => {
   try {
-    const response = await axios.get(`${API_URL}/product?type=wholesale`);
+    const response = await axios.get(`${API_URL}/product?type=retail`);
     const allProducts: Product[] = response.data;
     return allProducts;
   } catch (error) {

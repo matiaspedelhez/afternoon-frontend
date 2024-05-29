@@ -10,7 +10,7 @@ const Home: NextPage<{ products: Product[] }> = ({ products }) => {
   return (
     <>
       <Head>
-        <title>{`Afternoon Roastery: Inicio`}</title>
+        <title>{`Inicio - Afternoon Roastery`}</title>
         <meta property="og-locale" content="es_ES"></meta>
         <meta property="og:title" content={`Inicio`} key="title" />
         <meta

@@ -59,17 +59,17 @@ const Navbar: React.FunctionComponent<NavbarProps> = ({
               </a>
             </Link> */}
             <a
-              href="https://afternoon.com.ar"
+              href="https://mayorista.afternoon.com.ar"
               className="cursor-pointer text-center font-medium text-gray-500 hover:text-gray-900"
             >
-              Minorista
+              Mayorista
             </a>
             <Link
               href="/contact"
               className="text-base font-medium text-gray-500 hover:text-gray-900"
             >
               <a className="text-base font-medium text-gray-500 hover:text-gray-900">
-                Contacto Contacto
+                Contacto
               </a>
             </Link>
           </Popover.Group>
@@ -129,10 +129,10 @@ const Navbar: React.FunctionComponent<NavbarProps> = ({
                 </Link>
 
                 <a
-                  href="https://afternoon.com.ar"
+                  href="https://mayorista.afternoon.com.ar"
                   className="cursor-pointer text-center font-medium text-gray-500 hover:text-gray-900"
                 >
-                  Minorista
+                  Mayorista
                 </a>
 
                 <Link href="/contact">
@@ -140,7 +140,7 @@ const Navbar: React.FunctionComponent<NavbarProps> = ({
                     href="#"
                     className="cursor-pointer text-center font-medium text-gray-500 hover:text-gray-900"
                   >
-                    Contacto Contacto
+                    Contacto
                   </a>
                 </Link>
 

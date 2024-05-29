@@ -18,7 +18,7 @@ const Home: NextPage = () => {
 
     const formData = new FormData(event.currentTarget);
     let payload: any = {};
-    payload["from"] = "mayorista.afternoon.com.ar";
+    payload["from"] = "afternoon.com.ar";
 
     for (var [key, value] of formData) {
       payload[key] = value;
@@ -41,7 +41,7 @@ const Home: NextPage = () => {
   return (
     <>
       <Head>
-        <title>{`Contacto - Afternoon Roastery Mayorista`}</title>
+        <title>{`Contacto - Afternoon Roastery`}</title>
         <meta property="og-locale" content="es_ES"></meta>
         <meta property="og:title" content={`Inicio`} key="title" />
         <meta
@@ -56,11 +56,10 @@ const Home: NextPage = () => {
       <div className="mx-auto mt-24 max-w-7xl px-6 lg:px-8 ">
         <div className="mx-auto  lg:mx-0 border-b border-gray-900/10 pb-8">
           <h1 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
-            ¿Planeás abrir una cafetería?
+            Formulario de contacto
           </h1>
           <p className="mt-2 text-lg leading-8 text-gray-600">
-            Somos mayoristas de café de especialidad. Contactanos para conocer
-            más.
+            ¿Tienes alguna inquietud? ¡Contactanos!
           </p>
         </div>
         <form method="post" onSubmit={onSubmit}>

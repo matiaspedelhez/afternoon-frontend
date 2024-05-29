@@ -10,7 +10,7 @@ const errorPage: NextPage = () => {
   return (
     <div className="lg:px-24 lg:py-24 md:py-20 md:px-44 px-4 py-24 items-center flex justify-center flex-col-reverse lg:flex-row md:gap-28 gap-16 max-w-2xl mx-auto py-16 px-4 sm:py-24 sm:px-6 lg:max-w-7xl lg:px-8">
       <Head>
-        <title>{`Afternoon Roastery: Error 404`}</title>
+        <title>{`404 - Afternoon Roastery`}</title>
       </Head>
       <div className="xl:pt-24 w-full xl:w-1/2 relative pb-12 lg:pb-0 ">
         <div className="relative">

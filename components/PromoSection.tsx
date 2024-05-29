@@ -18,11 +18,12 @@ const PromoSection = () => {
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 sm:static">
           <div className="sm:max-w-lg">
             <h1 className="text-4xl font font-extrabold tracking-tight text-gray-900 sm:text-6xl">
-              Café de especialidad para empresas
+              Café de especialidad en tu hogar
             </h1>
             <p className="mt-4 text-xl text-gray-500">
-              Café de excelencia para tu empresa. Usamos los mejores granos del
-              mercado y hacemos envíos a todo el país.
+              Disfrutá de la mejor taza de café desde la comodidad de tu hogar.
+              Usamos los mejores granos del mercado y hacemos envíos a todo el
+              país.
             </p>
           </div>
           <div>
@@ -66,7 +67,7 @@ const PromoSection = () => {
               </div>
 
               <Link href="/store">
-                <a className="inline-block text-center bg-black border border-transparent rounded-md py-3 px-8 font-medium text-white hover:bg-amber-800">
+                <a className="inline-block text-center bg-amber-700 border border-transparent rounded-md py-3 px-8 font-medium text-white hover:bg-amber-800">
                   Ir a tienda
                 </a>
               </Link>
