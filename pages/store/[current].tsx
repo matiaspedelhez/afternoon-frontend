@@ -12,7 +12,7 @@ const Store: NextPage = ({ totalProducts, products, selectedPage }: any) => {
   return (
     <div>
       <Head>
-        <title>{`Afternoon Roastery: Tienda - Página ${selectedPage}`}</title>
+        <title>{`Página ${selectedPage} - Afternoon Roastery`}</title>
         <meta
           property="og:title"
           content={`Tienda: Página ${selectedPage}`}

@@ -19,7 +19,7 @@ const ProductByHandle: NextPage<ProductByHandleProps> = ({
   return (
     <div>
       <Head>
-        <title>{`Afternoon Roastery: ${productByHandle.title}`}</title>
+        <title>{`${productByHandle.title} - Afternoon Roastery`}</title>
         <meta
           property="og:title"
           content={`Producto: ${productByHandle.title}`}

@@ -66,7 +66,7 @@ const PromoSection = () => {
               </div>
 
               <Link href="/store">
-                <a className="inline-block text-center bg-black border border-transparent rounded-md py-3 px-8 font-medium text-white hover:bg-amber-800">
+                <a className="inline-block text-center bg-black border border-transparent rounded-md py-3 px-8 font-medium text-white hover:bg-zinc-800">
                   Ir a tienda
                 </a>
               </Link>
