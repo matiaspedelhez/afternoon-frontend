@@ -6,8 +6,6 @@
 
 Welcome to Afternoon Roastery! This is the front-end repository for our coffee roasting business website built with Next.js.
 
-## Description
-
 This repository contains the front-end codebase for Afternoon Roastery's website. Our website serves as a platform for showcasing our premium coffee products, providing information about our roasting process, and allowing customers to make purchases.
 
 ## Features
