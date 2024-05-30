@@ -71,6 +71,7 @@ export async function getStaticProps({ params }: any) {
 
     return {
       props: { totalProducts, selectedPage, products },
+      revalidate: 600,
     };
   } catch (error) {
     console.error("Error fetching products:", error);
@@ -79,7 +80,6 @@ export async function getStaticProps({ params }: any) {
         products: [],
         error: "Failed to fetch products",
       },
-      revalidate: 600,
     };
   }
 }
