@@ -50,10 +50,10 @@ export async function getStaticPaths() {
       },
     }));
 
-    return { paths, fallback: false };
+    return { paths, fallback: "blocking" };
   } catch (error) {
     console.log(error);
-    return { paths: [], fallback: false };
+    return { paths: [], fallback: "blocking" };
   }
 }
 
@@ -63,9 +63,14 @@ export async function getStaticProps({ params }: any) {
 
     return {
       props: { productByHandle },
+      revalidate: 600,
     };
   } catch (error) {
     console.log(error);
+    return {
+      props: {},
+      notFound: true, // Return 404 page
+    };
   }
 }
 

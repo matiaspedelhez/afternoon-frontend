@@ -55,9 +55,10 @@ export async function getStaticPaths() {
       };
     });
 
-    return { paths: paths, fallback: false };
+    return { paths: paths, fallback: "blocking" };
   } catch (error) {
     console.log(error);
+    return { paths: [], fallback: "blocking" };
   }
 }
 
@@ -70,6 +71,7 @@ export async function getStaticProps({ params }: any) {
 
     return {
       props: { totalProducts, selectedPage, products },
+      revalidate: 600,
     };
   } catch (error) {
     console.error("Error fetching products:", error);

@@ -36,6 +36,7 @@ export async function getStaticProps() {
       props: {
         products, // assuming getAllProducts returns an array of products
       },
+      revalidate: 600,
     };
   } catch (error) {
     console.error("Error fetching products:", error);
