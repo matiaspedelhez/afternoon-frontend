@@ -28,7 +28,7 @@ const Home: NextPage<{ products: Product[] }> = ({ products }) => {
   );
 };
 
-export async function getStaticProps() {
+export async function getServerSideProps() {
   try {
     const products = await getAllProducts();
 

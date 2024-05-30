@@ -55,9 +55,10 @@ export async function getStaticPaths() {
       };
     });
 
-    return { paths: paths, fallback: false };
+    return { paths: paths, fallback: "blocking" };
   } catch (error) {
     console.log(error);
+    return { paths: [], fallback: "blocking" };
   }
 }
 
@@ -78,6 +79,7 @@ export async function getStaticProps({ params }: any) {
         products: [],
         error: "Failed to fetch products",
       },
+      revalidate: 600,
     };
   }
 }
