@@ -28,7 +28,7 @@ const Home: NextPage<{ products: Product[] }> = ({ products }) => {
   );
 };
 
-export async function getServerSideProps() {
+export async function getStaticProps() {
   try {
     const products = await getAllProducts();
 
@@ -36,6 +36,7 @@ export async function getServerSideProps() {
       props: {
         products, // assuming getAllProducts returns an array of products
       },
+      revalidate: 600,
     };
   } catch (error) {
     console.error("Error fetching products:", error);
