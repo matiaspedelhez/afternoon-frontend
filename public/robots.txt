@@ -7,4 +7,4 @@ Allow: /
 
 Disallow: /store
 
-Sitemap: https://afternoon.com.ar/sitemap.xml
+Sitemap: https://mayorista.afternoon.com.ar/sitemap.xml
