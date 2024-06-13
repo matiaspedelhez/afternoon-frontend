@@ -143,18 +143,6 @@ const Navbar: React.FunctionComponent<NavbarProps> = ({
                     Contacto
                   </a>
                 </Link>
-
-                {/* <Link href="/about">
-                  <a className="cursor-pointer text-center font-medium text-gray-500 hover:text-gray-900">
-                    Acerca de
-                  </a>
-                </Link>
-
-                <Link href="/frequently-asked">
-                  <a className="cursor-pointer text-center font-medium text-gray-500 hover:text-gray-900">
-                    Ayuda
-                  </a>
-                </Link> */}
               </div>
               <a
                 onClick={switchCart}

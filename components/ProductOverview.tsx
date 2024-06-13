@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, Fragment } from "react";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -6,6 +6,8 @@ import { StarIcon } from "@heroicons/react/solid";
 import { RadioGroup } from "@headlessui/react";
 import { useSharedCartState } from "../pages/_app";
 import { toast } from "react-hot-toast";
+import { Popover, Transition } from "@headlessui/react";
+import { XIcon } from "@heroicons/react/outline";
 
 import { Product } from "../interfaces/product.interface";
 
@@ -61,6 +63,7 @@ const ProductOverview: React.FunctionComponent<ProductOverviewProps> = ({
   };
 
   const { shoppingCart, setShoppingCart } = useSharedCartState();
+  const [isGuideOpen, setIsGuideOpen] = useState(false);
   const [selectedSize, setSelectedSize] = useState(
     transformedProduct.sizes[0].name
   );
@@ -124,7 +127,7 @@ const ProductOverview: React.FunctionComponent<ProductOverviewProps> = ({
 
   return (
     <div className="bg-white">
-      <div className="pt-6">
+      <div className="bg-white z-11 pt-6">
         <nav aria-label="Breadcrumb">
           <ol
             role="list"
@@ -201,6 +204,83 @@ const ProductOverview: React.FunctionComponent<ProductOverviewProps> = ({
           </div>
         </div>
 
+        {/* Pop-up */}
+        <Transition
+          show={isGuideOpen}
+          enter="transition ease-out duration-300 fixed z-50"
+          enterFrom="opacity-0"
+          enterTo="opacity-100"
+          leave="transition ease-in duration-200 fixed z-50"
+          leaveFrom="opacity-100"
+          leaveTo="opacity-0"
+        >
+          <div className="fixed h-screen p-4 lg:p-8 inset-0 z-50 w-full flex items-center justify-center bg-black bg-opacity-20">
+            <div className="max-w-md w-full p-4 rounded-lg shadow-lg bg-white">
+              <div className="flex justify-between items-center">
+                <h1 className="text-2xl font-extrabold text-gray-900">
+                  Guía de molienda
+                </h1>
+                <button
+                  onClick={() => setIsGuideOpen(false)}
+                  className="text-gray-400 hover:text-gray-500 focus:outline-none"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="h-6 w-6"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M6 18L18 6M6 6l12 12"
+                    />
+                  </svg>
+                </button>
+              </div>
+              <div className="mt-6 space-y-6 mb-2 max-h-96 overflow-scroll overflow-x-hidden">
+                <div>
+                  <h3 className="font-medium">Molienda gruesa</h3>
+                  <ul className="list-disc px-5">
+                    <li>Prensa Francesa</li>
+                    <li>Cold brew</li>
+                  </ul>
+                </div>
+                <div>
+                  <h3 className="font-medium">Molienda media gruesa</h3>
+                  <ul className="list-disc px-5">
+                    <li>Cafetera con filtro metálico</li>
+                  </ul>
+                </div>
+                <div>
+                  <h3 className="font-medium">Molienda media</h3>
+                  <ul className="list-disc px-5">
+                    <li>Cafetera con filtro de papel</li>
+                    <li>Aeropress</li>
+                  </ul>
+                </div>
+                <div>
+                  <h3 className="font-medium">Molienda media fina</h3>
+                  <ul className="list-disc px-5">
+                    <li>V60</li>
+                    <li>Chemex</li>
+                    <li>Moka</li>
+                    <li>Aeropress (extracción rápida)</li>
+                  </ul>
+                </div>
+                <div>
+                  <h3 className="font-medium">Molienda fina</h3>
+                  <ul className="list-disc px-5">
+                    <li>Espressso</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </Transition>
+
         {/* Product info */}
         <div className="max-w-2xl mx-auto pt-10 pb-16 px-4 sm:px-6 lg:max-w-7xl lg:pt-16 lg:pb-24 lg:px-8 lg:grid lg:grid-cols-3 lg:grid-rows-[auto,auto,1fr] lg:gap-x-8">
           <div className="lg:col-span-2 lg:border-r lg:border-gray-200 lg:pr-8">
@@ -249,12 +329,28 @@ const ProductOverview: React.FunctionComponent<ProductOverviewProps> = ({
                   <h3 className="text-sm text-gray-900 font-medium">
                     Molienda
                   </h3>
-                  {/* <a
-                    href="#"
+
+                  {/* <button
+                    data-modal-trigger
+                    aria-controls="modal-name"
+                    aria-expanded="false"
                     className="text-sm font-medium text-amber-800 hover:text-amber-700"
+                    type="button"
                   >
-                    Guia de molienda
-                  </a> */}
+                    Guía de molienda
+                  </button> */}
+
+                  <button
+                    onClick={(e) => {
+                      e.preventDefault();
+                      setIsGuideOpen(true);
+                    }}
+                    className=""
+                  >
+                    <span className="text-sm font-medium text-amber-800 hover:text-amber-700">
+                      Guía de molienda
+                    </span>
+                  </button>
                 </div>
 
                 <RadioGroup
