@@ -273,7 +273,7 @@ const ProductOverview: React.FunctionComponent<ProductOverviewProps> = ({
                 <div>
                   <h3 className="font-medium">Molienda fina</h3>
                   <ul className="list-disc px-5">
-                    <li>Espressso</li>
+                    <li>Espresso</li>
                   </ul>
                 </div>
               </div>
