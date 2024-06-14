@@ -18,7 +18,8 @@ const Home: NextPage = () => {
 
     const formData = new FormData(event.currentTarget);
     let payload: any = {};
-    payload["from"] = "afternoon.com.ar";
+    payload["page-id"] = process.env.NEXT_PUBLIC_PAGE_ID ?? "";
+    payload["path-id"] = process.env.NEXT_PUBLIC_PATH_ID ?? "";
 
     for (var [key, value] of formData) {
       payload[key] = value;
