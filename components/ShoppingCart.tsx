@@ -30,6 +30,9 @@ function priceFormatting(x: any) {
 const ShoppingCart: React.FC<ShoppingCartProps> = ({ showCart, closeCart }) => {
   const { shoppingCart, setShoppingCart } = useSharedCartState();
   const [subTotal, setSubTotal] = useState<number>(0);
+  const [isCheckoutAvailable, setIsCheckoutAvailable] = useState<boolean>(
+    false
+  );
 
   useEffect(() => {
     const storagedCart: string | null = localStorage.getItem("shopping-cart");
@@ -40,13 +43,18 @@ const ShoppingCart: React.FC<ShoppingCartProps> = ({ showCart, closeCart }) => {
   }, []);
 
   useEffect(() => {
-    // updates the cart when user removes a item
+    // updates the cart when user removes or adds an item
     try {
       localStorage.setItem("shopping-cart", JSON.stringify(shoppingCart));
     } catch (error) {
       throw error;
     }
     handleSetSubTotal();
+
+    // update isCheckoutAvailable state
+    shoppingCart.length
+      ? setIsCheckoutAvailable(true)
+      : setIsCheckoutAvailable(false);
   }, [shoppingCart]);
 
   const handleRemoveItemFromCart = (product: CartItem): void => {
@@ -69,7 +77,6 @@ const ShoppingCart: React.FC<ShoppingCartProps> = ({ showCart, closeCart }) => {
 
   function buildWhatsappUrl(cart: CartItem[]) {
     // build wpp body
-    console.log(cart);
     let productLoopN = 0;
     let payload = "";
 
@@ -90,7 +97,7 @@ const ShoppingCart: React.FC<ShoppingCartProps> = ({ showCart, closeCart }) => {
     }
     const text = new URLSearchParams(payload).toString().replace("=", "");
 
-    return `https://wa.me/5493794906932?text=${text}`;
+    return `/api/send-whatsapp?text=${text}`;
   }
 
   const handleSetSubTotal = () => {
@@ -235,10 +242,23 @@ const ShoppingCart: React.FC<ShoppingCartProps> = ({ showCart, closeCart }) => {
                       </p>
                       <div className="mt-6">
                         <a
-                          href={buildWhatsappUrl(shoppingCart)}
+                          href={
+                            isCheckoutAvailable
+                              ? buildWhatsappUrl(shoppingCart)
+                              : "#"
+                          }
                           rel="noreferrer"
-                          target="_blank"
-                          className="flex items-center justify-center rounded-md border border-transparent bg-amber-700 px-6 py-3 text-base font-medium text-white shadow-sm hover:bg-amber-800"
+                          target={isCheckoutAvailable ? "_blank" : "_self"}
+                          className={`flex items-center justify-center rounded-md border border-transparent px-6 py-3 text-base font-medium text-white shadow-sm ${
+                            isCheckoutAvailable
+                              ? "bg-amber-700 hover:bg-amber-800"
+                              : "bg-neutral-700 text-neutral-400 cursor-not-allowed"
+                          }`}
+                          style={
+                            !isCheckoutAvailable
+                              ? { pointerEvents: "none" }
+                              : {}
+                          }
                         >
                           Pagar
                         </a>
