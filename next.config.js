@@ -15,6 +15,20 @@ const nextConfig = {
     ],
   },
   trailingSlash: true,
+
+  async headers() {
+    return [
+      {
+        source: '/(.*)',
+        headers: [
+          {
+            key: 'Cache-Control',
+            value: 'no-cache', 
+          },
+        ],
+      },
+    ];
+  },
 };
 
 module.exports = nextConfig;
